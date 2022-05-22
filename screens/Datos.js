@@ -16,45 +16,45 @@ const Datos = ({ navigation }) => {
   const [genero, setGenero] = useState('');
   const [userId, setUserId] = useState(0);
   const [modalVisible, setModalVisible] = useState(false);
-  const [data_Mongo_user, setTodosLosUsuariosPorFetch] = useState();
-  const [data_Mongo_user_create, setCreateUserPorFetch] = useState(0);
-  console.log(data_Mongo_user);
+  // const [data_Mongo_user, setTodosLosUsuariosPorFetch] = useState();
+  // const [data_Mongo_user_create, setCreateUserPorFetch] = useState(0);
+  // console.log(data_Mongo_user);
   useEffect(() => { }, [userId]);
   
-  const obtenertodosLosUsuariosPorFetch = async () =>{
-    const dataExtraida = 
-      await 
-      fetch('https://backend-testmandados.herokuapp.com/api/users',{
-        method:'GET',
-      })
-      .then(response => response.json());
-    setTodosLosUsuariosPorFetch(dataExtraida.length);
-  }
-  obtenertodosLosUsuariosPorFetch();
-  const creacionUsuarioPorFetch = async (lastt) =>{
-    const dataExtraidaa =
-      await
-      fetch('https://backend-testmandados.herokuapp.com/api/users',{
-        method:'POST',
-        headers:{
-          Accept:'application/JSON',
-          'Content-Type':'application/JSON',
-        },
-        body:JSON.stringify({
-          id: lastt,
-          name: nombre,
-          edad: edad,
-          telefono: telefono,
-          educacion: educacion,
-          estadoCivil:estadoCivil,
-          genero:genero
-        })
-      })
-      .then(response=>response.text())
-      .then(response => {console.log('fetch usuario creado '+response)})
-      .catch(e=> console.log(e)); 
-    console.log(dataExtraidaa);
-  }
+  // const obtenertodosLosUsuariosPorFetch = async () =>{
+  //   const dataExtraida = 
+  //     await 
+  //     fetch('https://backend-testmandados.herokuapp.com/api/users',{
+  //       method:'GET',
+  //     })
+  //     .then(response => response.json());
+  //   setTodosLosUsuariosPorFetch(dataExtraida.length);
+  // }
+  //obtenertodosLosUsuariosPorFetch();
+  // const creacionUsuarioPorFetch = async (lastt) =>{
+  //   const dataExtraidaa =
+  //     await
+  //     fetch('https://backend-testmandados.herokuapp.com/api/users',{
+  //       method:'POST',
+  //       headers:{
+  //         Accept:'application/JSON',
+  //         'Content-Type':'application/JSON',
+  //       },
+  //       body:JSON.stringify({
+  //         id: lastt,
+  //         name: nombre,
+  //         edad: edad,
+  //         telefono: telefono,
+  //         educacion: educacion,
+  //         estadoCivil:estadoCivil,
+  //         genero:genero
+  //       })
+  //     })
+  //     .then(response=>response.text())
+  //     .then(response => {console.log('fetch usuario creado '+response)})
+  //     .catch(e=> console.log(e)); 
+  //   console.log(dataExtraidaa);
+  // }
   const deleteAllUserRealm = ()=>{realm.write(() => { realm.deleteAll();  });}
 
   const agregarUser = () => {
@@ -82,20 +82,21 @@ const Datos = ({ navigation }) => {
     console.log(realm.objects('User')[realm.objects('User').length - 1]);
     // PETICION FETCH
    
-    creacionUsuarioPorFetch(data_Mongo_user+1);
-    setCreateUserPorFetch(data_Mongo_user+1);
+    //creacionUsuarioPorFetch(data_Mongo_user+1);
+    //setCreateUserPorFetch(data_Mongo_user+1);
     // SET DATOS NULOS
     setNombre('');seteducacion('');setEdad('');settelefono('');setEstadoCivil('');setGenero('');
 
     // MOVIMIENTO A LA PANTALLA SIGUIENTE
     navigation.navigate('Juego_Mapa', { 
                             user: realm.objects('User')[realm.objects('User').length - 1],
-                            userIdd:(data_Mongo_user+1), 
+                            //userIdd:(data_Mongo_user+1),   //descomentar esto para indicar que se va usar con peticiones fetch
+                            userIdd:0,
                           });
   }
  
-  console.log('datos mongo '+ data_Mongo_user);
-  console.log('datos mongo create '+ data_Mongo_user_create);
+  // console.log('datos mongo '+ data_Mongo_user);
+  // console.log('datos mongo create '+ data_Mongo_user_create);
   const handleVerificateOfData = () => {
     if (nombre !== '' && educacion !== '' && edad !== '' && telefono !== '' && genero !== '' && estadoCivil !== '') {
       agregarUser();
