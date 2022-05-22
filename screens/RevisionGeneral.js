@@ -1,37 +1,40 @@
 import React, { useState,useEffect } from 'react';
 import { Dimensions, StyleSheet, FlatList, Text, TouchableOpacity, SafeAreaView, View } from 'react-native';
-import Realm from 'realm';
+//import Realm from 'realm';
+import realm from '../REALMDB';
 
 const RevisionGeneral = ({ navigation, route }) => {
 
+  
+
   const {juegoId} = route.params;
-  const [data_Mongo_One_Juego, setOneJuegoPorFetch] = useState();
-  let realm;
-  realm = new Realm({ path: 'version7.realm' });
-  //const [juego, setJuego] = useState(realm.objects('Juego').filtered('id=' + route.params.juegoId.toString())[0].posiciones);
+  //const [data_Mongo_One_Juego, setOneJuegoPorFetch] = useState();
+  //let realm;
+  //realm = new Realm({ path: 'version7.realm' });
+  const [juego, setJuego] = useState(realm.objects('Juego').filtered('id=' + route.params.juegoId.toString())[0].posiciones);
   //const [puntaje, setPuntaje] = useState(realm.objects('Juego').filtered('id=' + route.params.juegoId.toString())[0].tipo);
-  //const [juegoTiempo, setJuegoTiempo] = useState(realm.objects('Juego').filtered('id=' + route.params.juegoId.toString())[0].posicionesTiempo);
-  const [juego, setJuego] = useState([]);
+  const [juegoTiempo, setJuegoTiempo] = useState(realm.objects('Juego').filtered('id=' + route.params.juegoId.toString())[0].posicionesTiempo);
+  //const [juego, setJuego] = useState([]);
   //const [puntaje, setPuntaje] = useState(realm.objects('Juego').filtered('id=' + route.params.juegoId.toString())[0].tipo);
-  const [juegoTiempo, setJuegoTiempo] = useState([]);
-  const obtenerOneJuegosPorFetch = async () =>{
-    const dataExtraida = 
-      await 
-      fetch('https://backend-testmandados.herokuapp.com/api/juegos/'+juegoId,{
-        method:'GET',
-      })
-      .then(response => response.json());
-    setOneJuegoPorFetch(dataExtraida);
-    setJuego(dataExtraida[0].posiciones);
-    setJuegoTiempo(dataExtraida[0].posicionesTiempo);
-    console.log(dataExtraida);
-  }
-  useEffect(() => {
-    obtenerOneJuegosPorFetch();
-    //console.log('revision general '+data_Mongo_One_Juego[0].id);
-  }, []);
+  //const [juegoTiempo, setJuegoTiempo] = useState([]);
+  // const obtenerOneJuegosPorFetch = async () =>{
+  //   const dataExtraida = 
+  //     await 
+  //     fetch('https://backend-testmandados.herokuapp.com/api/juegos/'+juegoId,{
+  //       method:'GET',
+  //     })
+  //     .then(response => response.json());
+  //   setOneJuegoPorFetch(dataExtraida);
+  //   setJuego(dataExtraida[0].posiciones);
+  //   setJuegoTiempo(dataExtraida[0].posicionesTiempo);
+  //   console.log(dataExtraida);
+  // }
+  // useEffect(() => {
+  //   obtenerOneJuegosPorFetch();
+  //   //console.log('revision general '+data_Mongo_One_Juego[0].id);
+  // }, []);
   //let tt = JSON.stringify(data_Mongo_One_Juego);
-  console.log('-------------------------------------------------------revision general '+JSON.stringify(data_Mongo_One_Juego));
+  //console.log('-------------------------------------------------------revision general '+JSON.stringify(data_Mongo_One_Juego));
   console.log('aa');
   // ---- con REALM ---------- IMPORTANTE no BORRAR --------------------------------------------------------------------------------------------------------
  

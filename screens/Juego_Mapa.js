@@ -7,15 +7,15 @@ const Juego_Mapa = ({ navigation, route }) => {
   //const {navigation} = this.props;
   const [minutoMapa, setMinutoMapa] = useState(0);//era 10
   const [segundoMapa, setSegundoMapa] = useState(0);
-  const { user, userIdd } = route.params;
+  const { user, userIdd } = route.params;//userIDD se queda habilitado para implementacio futura de peticiones FETCH
   //console.log(JSON.stringify(user));
   /////////////////////////////////////////////////////////////////////////////////////////////////////console.log('juegomapa mongoo '+ userIdd);
   const [modalVisible, setModalVisible] = useState(false);
   const [modalVisible2, setModalVisible2] = useState(false);
   const [modalVisible3, setModalVisible3] = useState(false);
   
-  const [data_Mongo_One_User, setOneUsuarioPorFetch] = useState();
-  const [data_Mongo_Juegos,setTodosLosJuegosPorFetch]= useState();
+  //const [data_Mongo_One_User, setOneUsuarioPorFetch] = useState();
+  //const [data_Mongo_Juegos,setTodosLosJuegosPorFetch]= useState();
   
   useEffect(() => {
     const timerId = setInterval(() => {
@@ -198,6 +198,7 @@ const Juego_Mapa = ({ navigation, route }) => {
     return puntajeBase;
   }
 
+  
   const finalizarJuego = () => {
     if (posicionesNumericas.length == 11) {
       setModalVisible2(!modalVisible2);
@@ -206,53 +207,53 @@ const Juego_Mapa = ({ navigation, route }) => {
       setModalVisible3(!modalVisible3);
     }
   };
-  const obtenerOneUsuariosPorFetch = async () =>{
-    const dataExtraida = 
-      await 
-      fetch('https://backend-testmandados.herokuapp.com/api/users/'+userIdd,{
-        method:'GET',
-      })
-      .then(response => response.json());
-    setOneUsuarioPorFetch(dataExtraida);
-  }
+  // const obtenerOneUsuariosPorFetch = async () =>{
+  //   const dataExtraida = 
+  //     await 
+  //     fetch('https://backend-testmandados.herokuapp.com/api/users/'+userIdd,{
+  //       method:'GET',
+  //     })
+  //     .then(response => response.json());
+  //   setOneUsuarioPorFetch(dataExtraida);
+  // }
  
-  const obtenertodosLosJuegosPorFetch = async () =>{
-    const dataExtraida =
-      await
-      fetch('https://backend-testmandados.herokuapp.com/api/juegos',{
-        method:'GET',
-      })
-      .then(response => response.json());
-      setTodosLosJuegosPorFetch(dataExtraida.length);
-  }
-  useEffect(() => {
-    obtenerOneUsuariosPorFetch();
-    obtenertodosLosJuegosPorFetch();
-  }, []);
+  // const obtenertodosLosJuegosPorFetch = async () =>{
+  //   const dataExtraida =
+  //     await
+  //     fetch('https://backend-testmandados.herokuapp.com/api/juegos',{
+  //       method:'GET',
+  //     })
+  //     .then(response => response.json());
+  //     setTodosLosJuegosPorFetch(dataExtraida.length);
+  // }
+  // useEffect(() => {
+  //   obtenerOneUsuariosPorFetch();
+  //   obtenertodosLosJuegosPorFetch();
+  // }, []);
  
-  const creacionJuegoPorFetch = async (lastt,puntaje,data_Mongo_One_User,posiciones,timePosition,posicionesNumericas) =>{
+  // const creacionJuegoPorFetch = async (lastt,puntaje,data_Mongo_One_User,posiciones,timePosition,posicionesNumericas) =>{
    
-      await
-      fetch('https://backend-testmandados.herokuapp.com/api/juegos',{
-        method:'POST',
-        headers:{
-          Accept:'application/JSON',
-          'Content-Type':'application/JSON',
-        },
-        body:JSON.stringify({
-          id: lastt.toString(),
-          tipo: puntaje,
-          user:data_Mongo_One_User,
-          posiciones:posiciones,
-          posicionesTiempo:timePosition,
-          posicionesNumericas:posicionesNumericas,
-        })
-      })
-      .then(response=>response.text())
-      .then(response => console.log('CREACION JUEGO FETCH'+response))
-      .catch(e=> console.log(e));
+  //     await
+  //     fetch('https://backend-testmandados.herokuapp.com/api/juegos',{
+  //       method:'POST',
+  //       headers:{
+  //         Accept:'application/JSON',
+  //         'Content-Type':'application/JSON',
+  //       },
+  //       body:JSON.stringify({
+  //         id: lastt.toString(),
+  //         tipo: puntaje,
+  //         user:data_Mongo_One_User,
+  //         posiciones:posiciones,
+  //         posicionesTiempo:timePosition,
+  //         posicionesNumericas:posicionesNumericas,
+  //       })
+  //     })
+  //     .then(response=>response.text())
+  //     .then(response => console.log('CREACION JUEGO FETCH'+response))
+  //     .catch(e=> console.log(e));
     
-  }
+  // }
   
   const agregarJuego_User = () => {
     if (posicionesNumericas.length == 11) {
@@ -286,10 +287,10 @@ const Juego_Mapa = ({ navigation, route }) => {
       console.log('Juego agregado');
       console.log(realm.objects('Juego'));
       
-      creacionJuegoPorFetch(data_Mongo_Juegos+1,puntaje,data_Mongo_One_User[0],posiciones,timePosition,posicionesNumericas);
+      // creacionJuegoPorFetch(data_Mongo_Juegos+1,puntaje,data_Mongo_One_User[0],posiciones,timePosition,posicionesNumericas);
      
-      navigation.navigate('Revision_General', { juegoId: (data_Mongo_Juegos+1) });
-
+      //navigation.navigate('Revision_General', { juegoId: (data_Mongo_Juegos+1) });
+      navigation.navigate('Revision_General', { juegoId: last });
     }
     else {
       navigation.navigate('Inicio');
@@ -571,8 +572,8 @@ const Juego_Mapa = ({ navigation, route }) => {
       }
     }
     else{
-      let arrayTopLocalidades =['-5%','0%','0%','10%','15%','10%','10%','12%','10%','0%'];
-      let arrayLeftLocalidades=['60%','70%','25%','53%','43%','80%','23%','50%','30%','75%'];
+      let arrayTopLocalidades =['-6%','2%','3%','10%','13%','8%','8%','14%','8%','2%'];
+      let arrayLeftLocalidades=['60%','73%','28%','56%','43%','85%','23%','50%','34%','79%'];
       for (let i = 0; i < 10; i++) {
         viewsPantallaJuego.push(
           <View style={[styles.buttonLocalidad, { top: arrayTopLocalidades[i], left: arrayLeftLocalidades[i], }]} key={i}>

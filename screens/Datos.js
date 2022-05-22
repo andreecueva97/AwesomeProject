@@ -3,6 +3,7 @@ import {   SafeAreaView, StyleSheet, TextInput, Dimensions, ScrollView, Text, Vi
 } from 'react-native';
 //import realm, { Juego, User, version3 } from '../REALMDB.js';
 
+
 import realm from '../REALMDB';
 LogBox.ignoreLogs([ 'Non-serializable values were found in the navigation state',]);
 const Datos = ({ navigation }) => {

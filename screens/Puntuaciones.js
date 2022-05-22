@@ -4,14 +4,13 @@ import {  Dimensions, StyleSheet, FlatList,SafeAreaView,Text,TouchableOpacity,Vi
 import realm from '../REALMDB';
 import { LogBox } from 'react-native';
 import { DownloadDirectoryPath, getAllExternalFilesDirs, write} from 'react-native-fs';
-
 //#############################################################################################const convertCsvToXlsx = require('@aternus/csv-to-xlsx');
 
 const Puntuaciones = ({ navigation }) => {
   const [isloading,setIsLoading]=useState(true);
   LogBox.ignoreLogs(['new NativeEventEmitter']); // Ignore log notification by message
-LogBox.ignoreAllLogs(); //Ignore all log notifications
-const [modalVisible, setModalVisible] = useState(false);
+  LogBox.ignoreAllLogs(); //Ignore all log notifications
+  const [modalVisible, setModalVisible] = useState(false);
   //import fs = require('fs');
   const { Parser, transforms: { unwind } } = require('json2csv');
   const [jsonArray,setJsonArray]=useState();
@@ -24,26 +23,26 @@ const [modalVisible, setModalVisible] = useState(false);
   //const [juegoTiempo, setJuegoTiempo] = useState(realm.objects('Juego').filtered('id=' + route.params.juegoId.toString())[0].posicionesTiempo);
   let juegoRealizadosData = realm.objects('Juego');
 
-  const obtenertodosLosJuegosPorFetch = async () =>{
-    const dataExtraida =
-      await
-      fetch('https://backend-testmandados.herokuapp.com/api/juegos',{
-        method:'GET',
-      })
-      .then(response => response.json());
-      setTodosLosJuegosPorFetch(dataExtraida);
-  }
-  useEffect(() => {
-    
-    obtenertodosLosJuegosPorFetch();
-    setIsLoading(true);
-  }, []);
-  console.log('data mongo Juegos ########################');
-  console.log(data_Mongo_Juegos);
+//  const obtenertodosLosJuegosPorFetch = async () =>{
+//    const dataExtraida =
+//      await
+//      fetch('https://backend-testmandados.herokuapp.com/api/juegos',{
+//        method:'GET',
+//      })
+//      .then(response => response.json());
+//      setTodosLosJuegosPorFetch(dataExtraida);
+//  }
+//  useEffect(() => {
+//    
+//    obtenertodosLosJuegosPorFetch();
+//    setIsLoading(true);
+//  }, []);
+//  console.log('data mongo Juegos ########################');
+//  console.log(data_Mongo_Juegos);
 
    //############################################################################################################CODE EXPORT CSV AND EXPORT XSLX
   // COLUMNAS que van a tener cada juego traido de la bd.
-  const fieldExportData=(dataMongo)=>{
+  const fieldExportData=(dataBase)=>{
     var RNFS = require('react-native-fs');
     console.log('fieldExportData @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@');
     const fields = ['_id','id','tipo','user.id','user.name','user.edad','user.telefono','user.educacion','user.estadoCivil','user.genero','user._id' ,'posiciones[0]','posiciones[1]',
@@ -57,7 +56,7 @@ const [modalVisible, setModalVisible] = useState(false);
     // indico que voy a pasear el JSON segun los fields que son las columnas que poseo y indicando las transformaciones dentro de cada obj. JSON
     const json2csvParser = new Parser({ fields, transforms });
     // realizo el PARSEO de los datos con las configuraciones preasignadaas en la linea anterior.
-    const csvv = json2csvParser.parse(dataMongo);
+    const csvv = json2csvParser.parse(dataBase);
     console.log(csvv);
     console.log("parser");
   
@@ -99,12 +98,14 @@ const [modalVisible, setModalVisible] = useState(false);
       });
     console.log(year + "-" + month + "-" + date);
   }
+
+  
     //############################################################################################################CODE EXPORT CSV AND EXPORT XSLX
   const dataDeJuegosRealizados =()=>{
     if (isloading ==true){
       return(<FlatList //lista de localidades en vista con sus nombres y ids y tiempo y posiciones de haber ido //data={realm.objects('Juego')}
-      //data={juegoRealizadosData}
-      data={data_Mongo_Juegos}
+      data={juegoRealizadosData}
+      //data={data_Mongo_Juegos}    // UTILIZAR PARA USAR LA BASE DE DATOS MONGO Y OBTENER LOS JUEGOS REALIZADOS POR PETICIONES FETCH.
       style={{ fontSize: Dimensions.get('window').width / 14, color: 'white' }}
       renderItem={({ item }) =>
         <View style={styles.viewGeneral_flatlist}>
@@ -160,7 +161,8 @@ const [modalVisible, setModalVisible] = useState(false);
             <TouchableOpacity style={styles.Instrucciones_Button} onPress={() => 
               { console.log('excel ----excel'); 
                 console.log(DownloadDirectoryPath);
-                fieldExportData(data_Mongo_Juegos);
+                //fieldExportData(data_Mongo_Juegos);// UTILIZAR EN CASO DE USAR MONGODB
+                fieldExportData(juegoRealizadosData);
                 setModalVisible(!modalVisible);
             }
               }>

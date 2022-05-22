@@ -6,6 +6,8 @@ import {
   useColorScheme,
 } from 'react-native';
 
+
+
 const Juego_Recorrido = ({navigation})=>{
   const [modalVisible, setModalVisible] = useState(false);
  
@@ -15,6 +17,7 @@ const Juego_Recorrido = ({navigation})=>{
         <View style={[styles.inicio_Title,{top:342}]}>
           <Text style={styles.inicio_Text}>Test de los Mandados</Text>
         </View>          
+
         
         <View style={{zIndex:10,color:'red',height:500,width:500,top:340,flex:1,left:150}}>
           <FlatList //lista de perrros en vista con sus nombres y ids

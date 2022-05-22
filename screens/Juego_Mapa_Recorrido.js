@@ -2,14 +2,14 @@ import React, { useState, useEffect } from 'react';
 import { Image, StyleSheet, Dimensions, Text, View, TouchableHighlight, Modal, Alert, FlatList } from 'react-native';
 import Clock from '../components/Clock';
 import { TouchableOpacity } from 'react-native-gesture-handler';
-import Realm from 'realm';
+import realm from '../REALMDB';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 const Juego_Mapa_Recorrido = ({ navigation, route }) => {
     
     const [modalVisible, setModalVisible] = useState(false);
-    let realm;
-    realm = new Realm({ path: 'version7.realm' });
+    //let realm;
+    //realm = new Realm({ path: 'version7.realm' });
 
     const [posiciones, setPosiciones] = useState(['la casa']);
     const [estado0, setEstado0] = useState([]); const [estado1, setEstado1] = useState([]); const [estado2, setEstado2] = useState([]); const [estado3, setEstado3] = useState([]);
@@ -269,45 +269,50 @@ const Juego_Mapa_Recorrido = ({ navigation, route }) => {
         //console.log('posicioNum==> ' + posicionesNumericas);
         // console.log("___________________________________________________");
     };
-    const [juego, setJuegoCompleto] = useState();
-    const [juegoPosiciones, setJuego] = useState();
-    const [juegoTiempo, setJuegoTiempo] = useState();
-    const [puntaje, setPuntaje] = useState();
-    const [isloading,setLoading]= useState(true);
+    // const [juego, setJuegoCompleto] = useState();
+    // const [juegoPosiciones, setJuego] = useState();
+    // const [juegoTiempo, setJuegoTiempo] = useState();
+    // const [puntaje, setPuntaje] = useState();
+    const [isloading,setLoading]= useState(false);// si utiliza peticiones fetch usar true.
     //console.log(route.params.juegoId);
-    const obtenerOneJuegosPorFetch = async () =>{
-        const dataExtraida = 
-          await 
-          fetch('https://backend-testmandados.herokuapp.com/api/juegos/'+route.params.juegoId,{
-            method:'GET',
-          })
-          .then(response => response.json());
-        //setOneJuegoPorFetch(dataExtraida);
-        setJuegoCompleto(dataExtraida[0]);
-        setJuegoTiempo(dataExtraida[0].posicionesTiempo);
-        setJuego(dataExtraida[0].posiciones);
-        setPuntaje(dataExtraida[0].tipo);
-        setLoading(false);
-        //console.log(dataExtraida);
-        // (dataExtraida[0].posiciones).map((item) => {
-        //     if (item == "la casa") {
-        //     }
-        //     else {
-        //         agregarPosicionNueva(item)
-        //         //console.log(item);
-        //     }
-        // });
-      }
-    useEffect(() => {
-       obtenerOneJuegosPorFetch();
-        //console.log('revision general '+data_Mongo_One_Juego[0].id);
-    }, []);
+    // const obtenerOneJuegosPorFetch = async () =>{
+    //     const dataExtraida = 
+    //       await 
+    //       fetch('https://backend-testmandados.herokuapp.com/api/juegos/'+route.params.juegoId,{
+    //         method:'GET',
+    //       })
+    //       .then(response => response.json());
+    //     //setOneJuegoPorFetch(dataExtraida);
+    //     setJuegoCompleto(dataExtraida[0]);
+    //     setJuegoTiempo(dataExtraida[0].posicionesTiempo);
+    //     setJuego(dataExtraida[0].posiciones);
+    //     setPuntaje(dataExtraida[0].tipo);
+    //     setLoading(false);
+    //     //console.log(dataExtraida);
+    //     // (dataExtraida[0].posiciones).map((item) => {
+    //     //     if (item == "la casa") {
+    //     //     }
+    //     //     else {
+    //     //         agregarPosicionNueva(item)
+    //     //         //console.log(item);
+    //     //     }
+    //     // });
+    //   }
+    // useEffect(() => {
+    //    obtenerOneJuegosPorFetch();
+    //     //console.log('revision general '+data_Mongo_One_Juego[0].id);
+    // }, []);
 
-    //let juego = realm.objects('Juego').filtered('id=' + route.params.juegoId.toString())[0];
+    let juego = realm.objects('Juego').filtered('id=' + route.params.juegoId.toString())[0];
     //console.log('JUEGO MONGO #################');
     //console.log(juego);
     //let posicionesTraidasdelaDB = juego.posiciones;
     //console.log(juegoPosiciones);
+    const [juegoPosiciones, setJuego] = useState(realm.objects('Juego').filtered('id=' + route.params.juegoId.toString())[0].posiciones);
+    const [juegoTiempo, setJuegoTiempo] = useState(realm.objects('Juego').filtered('id=' + route.params.juegoId.toString())[0].posicionesTiempo);
+    const [puntaje, setPuntaje] = useState(realm.objects('Juego').filtered('id=' + route.params.juegoId.toString())[0].tipo);
+    const [juegoLocalidades, setJuegoTiempol] = useState(realm.objects('Juego').filtered('id=' + route.params.juegoId.toString())[0].posiciones);
+   
     if (isloading ==false){
         (juegoPosiciones).map((item) => {
             if (item == "la casa") {
@@ -319,10 +324,6 @@ const Juego_Mapa_Recorrido = ({ navigation, route }) => {
         });
     }
 
-    //const [juegoPosiciones, setJuego] = useState(realm.objects('Juego').filtered('id=' + route.params.juegoId.toString())[0].posiciones);
-    //const [juegoTiempo, setJuegoTiempo] = useState(realm.objects('Juego').filtered('id=' + route.params.juegoId.toString())[0].posicionesTiempo);
-    //const [puntaje, setPuntaje] = useState(realm.objects('Juego').filtered('id=' + route.params.juegoId.toString())[0].tipo);
-    //const [juegoLocalidades, setJuegoTiempo] = useState(realm.objects('Juego').filtered('id=' + route.params.juegoId.toString())[0].posiciones);
     let Xh = '170.37%';
     const fontSizeX = Dimensions.get('window').width / 15;
     const fontSizeXX = Dimensions.get('window').width / 25;
@@ -348,8 +349,8 @@ const Juego_Mapa_Recorrido = ({ navigation, route }) => {
             let arrayLeftLocalidades=['60%','68%','34%','55%','46%','76%','31%','53%','38%','70%'];
             for (let i = 0; i < 10; i++) {
               viewsPantallaJuego.push(
-                <View style={[styles.buttonLocalidad, { top: arrayTopLocalidades[i], left: arrayLeftLocalidades[i],}]}>
-                    <TouchableOpacity style={[styles.circuleButton]} onPress={() => { funcionnOpacity2(arrayNameLocalidades[i]) }}>
+                <View style={[styles.buttonLocalidad, { top: arrayTopLocalidades[i], left: arrayLeftLocalidades[i],}]} key ={i}>
+                    <TouchableOpacity style={[styles.circuleButton]} onPress={() => { funcionnOpacity2(arrayNameLocalidades[i]) }} key={i}>
                       <Text style={{ transform: [{ rotate: '90 deg' }], fontSize: fontSizeX, textAlign: 'center', color: 'black' }}>{marcarNumeroLocalidad(arrayNumberLocalidades[i])}</Text>
                     </TouchableOpacity>
                   </View>
@@ -357,12 +358,12 @@ const Juego_Mapa_Recorrido = ({ navigation, route }) => {
             }
           }
           else{
-            let arrayTopLocalidades =['-5%','0%','0%','10%','15%','10%','10%','12%','10%','0%'];
-            let arrayLeftLocalidades=['60%','70%','25%','53%','43%','80%','23%','50%','30%','75%'];
+            let arrayTopLocalidades =['-6%','2%','3%','10%','13%','8%','8%','14%','8%','2%'];
+            let arrayLeftLocalidades=['60%','73%','28%','56%','43%','85%','23%','50%','34%','79%'];
             for (let i = 0; i < 10; i++) {
               viewsPantallaJuego.push(
-                <View style={[styles.buttonLocalidad, { top: arrayTopLocalidades[i], left: arrayLeftLocalidades[i], }]}>
-                    <TouchableOpacity style={[styles.circuleButton,{}]} onPress={() => { funcionnOpacity2(arrayNameLocalidades[i]) }}>
+                <View style={[styles.buttonLocalidad, { top: arrayTopLocalidades[i], left: arrayLeftLocalidades[i], }]} key={i}>
+                    <TouchableOpacity style={[styles.circuleButton,{}]} onPress={() => { funcionnOpacity2(arrayNameLocalidades[i]) }} key={i}>
                       <Text style={{ transform: [{ rotate: '90 deg' }], fontSize: fontSizeX, textAlign: 'center', color: 'black' }}>{marcarNumeroLocalidad(arrayNumberLocalidades[i])}</Text>
                     </TouchableOpacity>
                   </View>
@@ -450,7 +451,7 @@ const Juego_Mapa_Recorrido = ({ navigation, route }) => {
           <Image style={[stylesInMapa_Image]}
             source={require('@img/testmandados_LaCasaModificado-modified.png')} />
           <>
-            {images.map((img, i) => <Image style={[stylesInMapa_Images,{opacity: img.opacity}]} source={img.source} key={img.name} /> )  }
+            {images.map((img, i) => <Image style={[stylesInMapa_Images,{opacity: img.opacity}]} source={img.source} key={i} /> )  }
           </>
         </View>
     )
